@@ -29,10 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
 @OptIn(ExperimentalLayoutApi::class)
+@Preview
 @Composable
 fun AirQuality(
     modifier: Modifier = Modifier,
@@ -128,7 +131,6 @@ private fun RefreshButton(
         }
     }
 }
-
 @Composable
 private fun AirQualityInfo(
     modifier: Modifier = Modifier,

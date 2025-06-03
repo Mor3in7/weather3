@@ -1,18 +1,14 @@
 [versions]
-agp = "8.5.2"
-converter-gson = "2.9.0"
-kotlin = "1.9.0"
-androidx-core = "1.13.1"
-androidx-runtime = "2.8.4"
-compose-activity = "1.9.1"
-compose-bom = "2024.06.00"
-compose-constrain-layout = "1.0.1"
-core-ktx = "1.13.0"
-core-ktx-version = "1.13.0"
-androidx-core-ktx = "1.13.0"
-navigation-compose = "2.8.9"
-retrofit = "2.9.0"
-rxjava = "2.x.x"
+agp = "8.6.1"
+kotlin = "2.1.21"
+androidx-core = "1.16.0"
+androidx-runtime = "2.9.0"
+compose-activity = "1.10.1"
+compose-bom = "2025.05.01"
+compose-constrain-layout = "1.1.1"
+navigation-compose = "2.8.0"
+retrofit = "3.0.0"
+converter-gson = "3.0.0"
 
 [libraries]
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
@@ -27,13 +23,9 @@ compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 compose-constraint-layout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "compose-constrain-layout" }
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "compose-activity" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-gson" }
-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx-version" }
-androidx-core-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjava" }
 
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-gson" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 [bundles]
 androidX = ["androidx-core", "androidx-lifecycle"]
@@ -41,4 +33,5 @@ ui = ["compose-ui", "compose-graphics", "compose-tooling-preview", "compose-acti
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.0" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

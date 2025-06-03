@@ -1,16 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "androidlead.weatherappui"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "androidlead.weatherappui"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -53,12 +54,11 @@ dependencies {
     implementation(libs.bundles.androidX)
     //Compose
     implementation(platform(libs.compose.bom))
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.core.ktx)
-    implementation(libs.androidx.core.core.ktx)
     debugImplementation(libs.compose.tooling)
     implementation(libs.bundles.ui)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.androidx.core)
+
 }
