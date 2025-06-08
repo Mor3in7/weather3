@@ -13,3 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+# Ignore all of .idea/
+.idea/
+
+# But keep specific useful config files (if needed)
+!.idea/runConfigurations.xml
