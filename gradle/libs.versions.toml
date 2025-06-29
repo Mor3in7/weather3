@@ -2,13 +2,16 @@
 agp = "8.6.1"
 kotlin = "2.1.21"
 androidx-core = "1.16.0"
-androidx-runtime = "2.9.0"
+androidx-runtime = "2.9.1"
 compose-activity = "1.10.1"
-compose-bom = "2025.05.01"
+compose-bom = "2025.06.00"
 compose-constrain-layout = "1.1.1"
-navigation-compose = "2.8.0"
+navigation-compose = "2.9.0"
 retrofit = "3.0.0"
 converter-gson = "3.0.0"
+room = "2.7.1"
+ksp = "2.0.21-1.0.26"
+transport-runtime = "4.0.0"
 
 [libraries]
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
@@ -26,6 +29,10 @@ compose-activity = { group = "androidx.activity", name = "activity-compose", ver
 
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-gson" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+transport-runtime = { group = "com.google.android.datatransport", name = "transport-runtime", version.ref = "transport-runtime" }
 
 [bundles]
 androidX = ["androidx-core", "androidx-lifecycle"]
@@ -35,3 +42,5 @@ ui = ["compose-ui", "compose-graphics", "compose-tooling-preview", "compose-acti
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version = "1.9.22-1.0.17" } # نسخه KSP باید با نسخه Kotlin هماهنگ باشد
+room = { id = "androidx.room", version.ref = "room" }
