@@ -2,6 +2,7 @@ package androidlead.weatherappui.ui
 
 import androidlead.weatherappui.ui.screen.login.LOGin2
 import android.os.Bundle
+import androidlead.weatherappui.ui.navigation.Appnav
 import androidlead.weatherappui.ui.screen.WeatherScreen
 import androidlead.weatherappui.ui.screen.signup.SignUp
 import androidlead.weatherappui.ui.theme.WeatherAppUiTheme
@@ -19,38 +20,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeatherAppUiTheme {
-                AppNavigator()
+            Appnav()
+            }
+
             }
         }   
     }
-}
-
-@Composable
-fun AppNavigator() {
-    val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = "login") {
-
-        composable("login") {
-            LOGin2 {
-                navController.navigate("signup")
-            }
-        }
-
-        composable("signup") {
-            SignUp {
-                navController.navigate("weatherscreen")
-                {
-                    popUpTo("login") {
-                        inclusive = true
-                    }
-                }
-            }
-        }
-         composable("weatherscreen") {
-            WeatherScreen()
-        }
 
 
-    }
-}
+

@@ -27,7 +27,9 @@ import androidlead.weatherappui.ui.theme.cuOrange
 
 @Preview
 @Composable
-fun LOGin2(onButtonClicked: () -> Unit = {}) {
+fun LOGin2(
+    onLoginClick: () -> Unit = {},
+    onSignUpClick: () -> Unit = {}) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val showPassword = remember { mutableStateOf(false) }
@@ -188,7 +190,7 @@ fun LOGin2(onButtonClicked: () -> Unit = {}) {
                                 Text(text = "Need Help?", fontSize = 12.sp, color = Color(0xFFFFF085))
                             }
                             Button(
-                                onClick = onButtonClicked,
+                                onClick = onLoginClick,
                                 colors = ButtonDefaults.buttonColors(containerColor = cuOrange),
                                 shape = RoundedCornerShape(12.dp)
                             ) {
@@ -207,7 +209,7 @@ fun LOGin2(onButtonClicked: () -> Unit = {}) {
                         Spacer(modifier = Modifier.height(10.dp))
 
                         Button(
-                            onClick = onButtonClicked,
+                            onClick = onSignUpClick,
                             colors = ButtonDefaults.buttonColors(containerColor = cuOrange),
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp)

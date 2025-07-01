@@ -52,7 +52,7 @@ import kotlinx.coroutines.delay
 
 @Preview(showBackground = true)
 @Composable
-fun SignUp(onButtonClicked3: () -> Unit = {}) {
+fun SignUp(onSignUp_to_wescreen: () -> Unit = {}) {
     val username = remember { mutableStateOf("") }
     val emailInput = remember { mutableStateOf("") } // برای debounce
     val password = remember { mutableStateOf("") }
@@ -191,7 +191,7 @@ fun SignUp(onButtonClicked3: () -> Unit = {}) {
                                         Toast.LENGTH_LONG
                                     ).show()
                                 } else {
-                                    onButtonClicked3()
+                                    onSignUp_to_wescreen()
                                 }
                             },
                             modifier = Modifier

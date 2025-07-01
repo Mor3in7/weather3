@@ -1,18 +1,23 @@
 pluginManagement {
     repositories {
-        google()
-        mavenCentral()
+        maven(
+        "https://maven.myket.ir"
+    )
         gradlePluginPortal()
-    }
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
         google()
         mavenCentral()
+
     }
 }
 
-rootProject.name = "WeatherAppUi"
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven(
+        "https://maven.myket.ir"
+    )
+        google()
+        mavenCentral()
+
+    }}
 include(":app")
- 
