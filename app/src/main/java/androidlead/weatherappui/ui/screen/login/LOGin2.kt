@@ -66,7 +66,7 @@ fun LOGin2(
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                 Box(
                     modifier = Modifier
-                        .size(width = 300.dp, height = 400.dp)
+                        .size(width = 300.dp, height = 430.dp)
                         .clip(RoundedCornerShape(20.dp))
                         .background(Color.White.copy(alpha = 0.2f))
                 ) {
@@ -212,7 +212,9 @@ fun LOGin2(
                             onClick = onSignUpClick,
                             colors = ButtonDefaults.buttonColors(containerColor = cuOrange),
                             shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 40.dp)
+                            modifier =
+                                Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 4.dp)
+
                         ) {
                             Text(
                                 text = "Sign Up",
