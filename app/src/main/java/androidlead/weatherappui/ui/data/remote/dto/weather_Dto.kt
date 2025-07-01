@@ -60,6 +60,6 @@ data class weeklyforecast(
     val temperature: Double,    // temp.day
     val description: String,    // weather[0].description
     val airquality: Int,        // از aqi (عدد از 1 تا 5)
-    val icon_AQDT: String       // weather[0].icon
+    val icon_AQDT: String       // weather[0].iconssssss
 )
 
