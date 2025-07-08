@@ -44,3 +44,26 @@ interface WeatherApi {
         @Query("lang") lang: String = "fa" // زبان پاسخ (فارسی)
     ): FiveDayForecastDto
 }
+
+interface WeatherApi {
+    @GET("weather")
+    suspend fun getCurrentWeather(
+        @Query("q") city: String,
+        @Query("appid") apiKey: String
+    ): WeatherResponseDto
+
+    @GET("air_pollution")
+    suspend fun getAirQuality(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") apiKey: String
+    ): AirQualityDto
+
+    @GET("forecast/daily")
+    suspend fun getWeeklyForecast(
+        @Query("q") city: String,
+        @Query("cnt") count: Int = 7,
+        @Query("appid") apiKey: String
+    ): WeeklyForecastResponse // شامل List<weeklyforecast>
+}
+
