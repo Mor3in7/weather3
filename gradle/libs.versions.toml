@@ -13,8 +13,9 @@ converter-gson = "3.0.0"
 room = "2.7.1"
 ksp = "1.9.23-1.0.20"
 transport-runtime = "4.0.0"
-hiltAndroid = "2.51.1" # آخرین نسخه پایدار Hilt
-hiltNavigationCompose = "1.2.0" # آخرین نسخه پایدار Hilt Navigation Compose
+hiltAndroid = "2.51.1"
+hiltNavigationCompose = "1.2.0"
+
 
 [libraries]
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
@@ -22,6 +23,7 @@ androidx-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-k
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
@@ -33,29 +35,28 @@ compose-activity = { group = "androidx.activity", name = "activity-compose", ver
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpLoggingInterceptor" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-gson" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
 transport-runtime = { group = "com.google.android.datatransport", name = "transport-runtime", version.ref = "transport-runtime" }
 
-
-# Hilt
+# ✅ Hilt (اصلاح‌شده و کاملاً سازگار)
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltAndroid" }
-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroid" } # Hilt compiler برای KSP (از همین نسخه Hilt استفاده می‌کند)
-androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltNavigationCompose" } # Hilt compiler for androidx.hilt (ورژن آن را با hiltNavigationCompose یکسان قرار می‌دهیم)
+hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroid" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-
+androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltNavigationCompose" }
 
 [bundles]
 androidX = ["androidx-core", "androidx-lifecycle"]
 ui = ["compose-ui", "compose-graphics", "compose-tooling-preview", "compose-activity", "androidx-material3", "compose-constraint-layout"]
 
-
 [plugins]
-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version = "2.1.21" }
-
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
