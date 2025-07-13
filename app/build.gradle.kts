@@ -77,4 +77,6 @@ dependencies {
 
     implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.androidx.hilt.compiler)
+    implementation(libs.okhttp3.logging.interceptor)
+
 }

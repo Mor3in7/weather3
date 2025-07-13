@@ -1,14 +1,11 @@
-package androidlead.weatherappui.ui.data.repository
-
-// di/RepositoryModule.kt
-package your.app.package.di
+package androidlead.weatherappui.ui.di
 
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import your.app.package.data.repository.WeatherRepositoryImpl
-import your.app.package.domain.repository.WeatherRepository
+import androidlead.weatherappui.ui.data.repository.WeatherRepositoryImpl
+import androidlead.weatherappui.ui.domain.repository.WeatherRepository
 import javax.inject.Singleton
 
 // ماژول Hilt برای ارائه وابستگی‌های مربوط به Repository
