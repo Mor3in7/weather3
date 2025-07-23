@@ -7,6 +7,7 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import androidlead.weatherappui.ui.data.local.entity.CurrentWeatherEntity
 import androidlead.weatherappui.ui.data.local.entity.DailyForecastEntity
+import androidx.room.Transaction
 
 // اینترفیس DAO برای دسترسی به دیتابیس آب و هوا
 @Dao
@@ -16,23 +17,26 @@ interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCurrentWeather(weather: CurrentWeatherEntity)
 
-    // دریافت آب و هوای فعلی
-    @Query("SELECT * FROM current_weather_table LIMIT 1")
-    fun getCurrentWeather(): Flow<CurrentWeatherEntity?>
-
-    // حذف آب و هوای فعلی
-    @Query("DELETE FROM current_weather_table")
-    suspend fun deleteCurrentWeather()
-
-    // درج یا به‌روزرسانی لیست پیش‌بینی روزانه
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDailyForecasts(forecasts: List<DailyForecastEntity>)
 
-    // دریافت لیست پیش‌بینی روزانه
-    @Query("SELECT * FROM daily_forecast_table ORDER BY dateEpochMillis ASC")
-    fun getDailyForecasts(): Flow<List<DailyForecastEntity>>
+    @Query("SELECT * FROM CURRENT_WEATHER_TABLE WHERE city = :city")
+    fun getCurrentWeather(city: String): Flow<CurrentWeatherEntity?>
 
-    // حذف تمام پیش‌بینی‌های روزانه
-    @Query("DELETE FROM daily_forecast_table")
-    suspend fun deleteDailyForecasts()
+    @Query("SELECT * FROM DAILY_FORECAST_TABLE WHERE city = :city ORDER BY date ASC")
+    fun getDailyForecasts(city: String): Flow<List<DailyForecastEntity>>
+
+    @Query("DELETE FROM CURRENT_WEATHER_TABLE WHERE city = :city")
+    suspend fun deleteCurrentWeather(city: String)
+
+    @Query("DELETE FROM DAILY_FORECAST_TABLE WHERE city = :city")
+    suspend fun deleteDailyForecasts(city: String)
+
+    @Transaction
+    suspend fun saveWeatherData(currentWeather: CurrentWeatherEntity, dailyForecasts: List<DailyForecastEntity>) {
+        deleteCurrentWeather(currentWeather.city) // Clear old data for the city
+        deleteDailyForecasts(currentWeather.city) // Clear old data for the city
+        insertCurrentWeather(currentWeather)
+        insertDailyForecasts(dailyForecasts)
+    }
 }

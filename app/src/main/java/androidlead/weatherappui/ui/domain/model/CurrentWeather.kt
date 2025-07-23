@@ -3,7 +3,7 @@ package androidlead.weatherappui.ui.domain.model
 data class CurrentWeather(
     val cityName: String,
     val temperature: Float,
-    val feelsLike: Float,
+    val feelslike_c: Float,
     val description: String,
     val iconUrl: String, // URL کامل آیکون
     val humidity: Float,
@@ -12,6 +12,6 @@ data class CurrentWeather(
     val o3: Float?, // ازون
     val so2: Float?, // دی‌اکسید گوگرد
     val co: Float?, // مونوکسید کربن
-    val timestamp: Long // زمان دریافت داده
+    val lastUpdated: String // 👈 اضافه کن
 )
 

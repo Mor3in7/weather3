@@ -11,7 +11,7 @@ import javax.inject.Singleton
 // ماژول Hilt برای ارائه وابستگی‌های مربوط به Repository
 @Module
 @InstallIn(SingletonComponent::class) // این ماژول در سطح Singleton Component نصب می‌شود
-abstract class RepositoryModule {
+abstract class.RepositoryModule {
 
     // اتصال WeatherRepositoryImpl به اینترفیس WeatherRepository
     @Binds

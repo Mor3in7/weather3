@@ -1,94 +1,85 @@
 package androidlead.weatherappui.ui.data.remote.dto
 
-//import androidx.room.Index
-//
-//data class weatherDto(
-//val Currentweather:Current,
-//val AirQuality:AirQuality,
-//    val weeklyForecast: List<ForecastDay>
-//)
-//data class Current(
-//    val feelslike_c: Float,
-//    val temp_c: Float,
-//    val condition: Condition,
-////for Air Quality
-//    val humidity: Float,
-//    val wind_kph: Float,
-//    val Uv:Float,
-//)
-//data class Condition(
-//    val text: String,
-//    val icon: String,
-//    val code: Int
-//)
-//// ----------------------- Air Quality ------------------------
-//data class AirQuality(
-//    val o3: Float?,         // Ozone
-//    val so2: Float?,        // Sulphur Dioxide
-//    val uv_wind_humidity:Current// Ultraviolet
-//)
-//// ----------------------- Forecast ------------------------
-//data class ForecastDay(
-//    val date: String,
-//    val day: Day
-//)
-//
-//data class Day(
-//    val maxtemp_c: Float,
-//    val mintemp_c: Float,
-//    val avgtemp_c: Float,
-//    val daily_chance_of_rain: Int,
-//    val condition: Condition
-//)
-//
-//data class WeatherDto(
-//    val Currentweather:Current,
-//    val AirQuality:AirQuality,
-//    val weeklyForecast: List<ForecastDay>
-//        )
-//////////////
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class WeatherDto(
-    val current: Current,
-    val forecast: Forecast
+    val current: CurrentDto,
+    val forecast: ForecastDto,
+    val location: LocationDto
 )
 
-data class Current(
-    val temp_c: Float,
-    val feelslike_c: Float,
-    val humidity: Float,
-    val wind_kph: Float,
+@Serializable
+data class LocationDto(
+    val name: String,
+    val region: String,
+    val country: String
+)
+
+@Serializable
+data class CurrentDto(
+    @SerialName("temp_c")
+    val tempC: Float,
+    @SerialName("feelslike_c")
+    val feelsLikeC: Float,
+    val condition: ConditionDto,
+
+    // for Air Quality
+    @SerialName("wind_kph")
+    val windKph: Float,
+    val humidity: Int,
     val uv: Float,
-    val condition: Condition,
-    val air_quality: AirQuality
+    @SerialName("air_quality")
+    val airQuality:     AirQualityDto,
+
+    // theme switching
+    @SerialName("is_day")
+    val isDay: Int,
+
+    @SerialName("last_updated")
+    val lastUpdated: String
+
 )
 
-data class Condition(
+@Serializable
+data class ConditionDto(
     val text: String,
-    val icon: String,
-    val code: Int
+    val icon: String
 )
 
-data class AirQuality(
+@Serializable
+data class AirQualityDto(
     val o3: Float?,
     val so2: Float?,
-    val co: Float?
+    val co: Float?,
+    val pm25: Float
 )
 
-// ----------------------- Forecast ------------------------
-
-data class Forecast(
-    val forecastday: List<ForecastDay>
+@Serializable
+data class ForecastDto(
+    val forecastday: List<ForecastDayDto>
 )
 
-data class ForecastDay(
+@Serializable
+data class ForecastDayDto(
     val date: String,
-    val day: Day
+    val day: DayDto
 )
 
-data class Day(
-    val maxtemp_c: Float,
-    val mintemp_c: Float,
-    val avgtemp_c: Float,
-    val daily_chance_of_rain: Float,
-    val condition: Condition
+@Serializable
+data class DayDto(
+    @SerialName("maxtemp_c")
+    val maxTempC: Float,
+    @SerialName("mintemp_c")
+    val minTempC: Float,
+    @SerialName("daily_chance_of_rain")
+    val dailyChanceOfRain: Float,
+    val condition: ConditionFDto
+)
+
+@Serializable
+data class ConditionFDto(
+    val text: String,
+    val icon: String
 )

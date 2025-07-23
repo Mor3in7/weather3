@@ -11,13 +11,10 @@ import javax.inject.Inject
 class GetWeatherUseCase @Inject constructor(
     private val repository: WeatherRepository
 ) {
-    // فراخوانی Use Case برای آب و هوای فعلی
-    operator fun invoke(location: String): Flow<Resource<CurrentWeather>> {
-        return repository.getCurrentWeather(location)
+    // Operator function allows calling the use case like a function (e.g., getWeatherUseCase("Tehran"))
+    operator fun invoke(location: String): Flow<Result<Pair<CurrentWeather, List<DailyForecast>>>> {
+        return repository.getWeatherForecast(location)
     }
 
-    // فراخوانی Use Case برای پیش‌بینی 5 روزه
-    fun getFiveDayForecast(location: String): Flow<Resource<List<DailyForecast>>> {
-        return repository.getFiveDayForecast(location)
-    }
+
 }
