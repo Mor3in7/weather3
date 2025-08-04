@@ -13,10 +13,13 @@ data class DailyForecastEntity(
     val date: String,
     val maxTemp: Float,
     val minTemp: Float,
+    val avgTemp: Float, // Added avgTemp as it's in the DTOq
     val conditionText: String,
     val iconUrl: String,
     val dailyChanceOfRain: Float,
     val airQualityIpm25: Float,
     val airQualityIndicatorColorHex: String,
+    val timestamp: Long // Added timestamp for staleness check
+
 )
 

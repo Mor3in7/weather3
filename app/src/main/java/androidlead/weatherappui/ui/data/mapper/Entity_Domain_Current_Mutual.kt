@@ -40,6 +40,7 @@ fun CurrentWeather.toCurrentWeatherEntity(): CurrentWeatherEntity {
         so2 = so2,
         co = co,
         id = 0,
-        lastUpdated = lastUpdated
+        lastUpdated = lastUpdated,
+        timestamp = System.currentTimeMillis() // Set current timestamp
     )
 }

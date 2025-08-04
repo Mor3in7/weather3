@@ -14,40 +14,34 @@ fun Appnav() {
 
     NavHost(navController = navController, startDestination = "login") {
 
-        //login to signUp
+        // Login screen
         composable("login") {
-            LOGin2 (
+            LOGin2(
                 onLoginClick = {
                     navController.navigate("weatherscreen") {
                         popUpTo("login") { inclusive = true }
                     }
-                               }
-                ,
+                },
                 onSignUpClick = {
                     navController.navigate("signup")
                 }
             )
-            }
+        }
 
-
-
-
-        //sign Up to Home
+        // Sign Up screen
         composable("signup") {
             SignUp(
                 onSignUp_to_wescreen = {
-                    navController.navigate("weatherscreen")
-                    {
-                        popUpTo("login") { inclusive = true }
+                    navController.navigate("weatherscreen") {
+                        popUpTo("login") { inclusive = true } // Pop up to login to clear back stack
                     }
                 }
             )
         }
 
+        // Weather screen
         composable("weatherscreen") {
             WeatherScreen()
         }
-
-
     }
 }

@@ -7,6 +7,7 @@ import androidlead.weatherappui.ui.data.mapper.toCurrentWeather
 import androidlead.weatherappui.ui.data.mapper.toCurrentWeatherEntity
 import androidlead.weatherappui.ui.data.mapper.toDailyForecast
 import androidlead.weatherappui.ui.data.mapper.toDailyForecastEntity
+import androidlead.weatherappui.ui.data.mapper.toDailyForecasts
 import androidlead.weatherappui.ui.data.remote.api.WeatherApiService
 import androidlead.weatherappui.ui.domain.model.CurrentWeather
 import androidlead.weatherappui.ui.domain.model.DailyForecast
@@ -15,9 +16,6 @@ import androidlead.weatherappui.ui.domain.util.Resource
 import java.io.IOException
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first // To get the first emitted value from a Flow
-import kotlinx.coroutines.flow.map // For using map on Flow
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 // Implementation of the WeatherRepository interface
 class WeatherRepositoryImpl @Inject constructor(
@@ -62,7 +60,7 @@ class WeatherRepositoryImpl @Inject constructor(
         try {
             // Then try to fetch from API
             val currentResponse = api.getCurrentWeather(location, "yes")
-            val forecastResponse = api.getForecastWeather(location, 6, "yes") // 6 days forecast (today + 5 future)
+            val forecastResponse = api.getForecastWeather(location, "af90d1f1ee1e47608e0105059250807", "yes") // 6 days forecast (today + 5 future)
 
             if (currentResponse.isSuccessful && currentResponse.body() != null &&
                 forecastResponse.isSuccessful && forecastResponse.body() != null

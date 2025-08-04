@@ -24,7 +24,6 @@ data class CurrentDto(
     @SerialName("feelslike_c")
     val feelsLikeC: Float,
     val condition: ConditionDto,
-
     // for Air Quality
     @SerialName("wind_kph")
     val windKph: Float,
@@ -75,7 +74,9 @@ data class DayDto(
     val minTempC: Float,
     @SerialName("daily_chance_of_rain")
     val dailyChanceOfRain: Float,
-    val condition: ConditionFDto
+    val condition: ConditionFDto,
+    @SerialName("avgtemp_c") // Added avgtemp_c as it's often available in forecast DTOs
+    val avgTempC: Float,
 )
 
 @Serializable

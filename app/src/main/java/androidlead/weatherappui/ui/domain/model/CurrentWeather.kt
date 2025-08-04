@@ -12,6 +12,6 @@ data class CurrentWeather(
     val o3: Float?, // ازون
     val so2: Float?, // دی‌اکسید گوگرد
     val co: Float?, // مونوکسید کربن
-    val lastUpdated: String // 👈 اضافه کن
+    val lastUpdated: String
 )
 

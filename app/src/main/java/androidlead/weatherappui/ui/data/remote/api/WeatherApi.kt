@@ -18,10 +18,10 @@ interface WeatherApiService {
 
         @GET("v1/forecast.json")
     suspend fun getForecastWeather(
-        @Query("dt") date: String, // تاریخ به فرمت YYYY-MM-DD
-        @Query("key") apiKey: String,
-        @Query("q") location: String,
-        @Query("days") days: Int = 6,
-        @Query("aqi") aqi: String = "yes"
+            @Query("dt") date: String, // تاریخ به فرمت YYYY-MM-DD
+            @Query("key") apiKey: String,
+            @Query("q") location: String,
+            @Query("days") days: Int = 6,
+            @Query("aqi") aqi: String = "yes"
     ): Response<WeatherDto>
 }

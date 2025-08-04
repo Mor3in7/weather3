@@ -5,10 +5,8 @@ import androidlead.weatherappui.ui.domain.model.CurrentWeather
 import androidlead.weatherappui.ui.domain.model.DailyForecast
 import androidlead.weatherappui.ui.domain.util.Resource
 
-// اینترفیس Repository برای عملیات مربوط به آب و هوا
+// Repository interface for weather operations
 interface WeatherRepository {
-    // دریافت آب و هوای فعلی بر اساس مکان (نام شهر، مختصات و...)
-
-    // دریافت پیش‌بینی 5 روزه بر اساس مکان
-    fun getFiveDayForecast(location: String): Flow<Result<Pair<List<DailyForecast>,CurrentWeather>>>
+    // Get current weather and 5-day forecast based on location
+    fun getCurrentAndFiveDayForecast(location: String): Flow<Resource<Pair<CurrentWeather, List<DailyForecast>>>>
 }

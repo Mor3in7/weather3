@@ -8,12 +8,12 @@ import androidlead.weatherappui.ui.data.repository.WeatherRepositoryImpl
 import androidlead.weatherappui.ui.domain.repository.WeatherRepository
 import javax.inject.Singleton
 
-// ماژول Hilt برای ارائه وابستگی‌های مربوط به Repository
+// Hilt Module for providing Repository dependencies
 @Module
-@InstallIn(SingletonComponent::class) // این ماژول در سطح Singleton Component نصب می‌شود
-abstract class.RepositoryModule {
+@InstallIn(SingletonComponent::class) // This module is installed at the Singleton Component level
+abstract class RepositoryModule { // Removed the dot before class
 
-    // اتصال WeatherRepositoryImpl به اینترفیس WeatherRepository
+    // Binds WeatherRepositoryImpl to the WeatherRepository interface
     @Binds
     @Singleton
     abstract fun bindWeatherRepository(

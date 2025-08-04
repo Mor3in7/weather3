@@ -20,5 +20,7 @@ data class CurrentWeatherEntity(
     val o3: Float?,
     val so2: Float?,
     val co: Float?,
-    val lastUpdated: String
+    val lastUpdated: String,
+    val timestamp: Long // Added timestamp for staleness check
+
 )
