@@ -4,10 +4,10 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin.kapt) // اطمینان از نام دقیق در libs.versions.toml
 }
 
 android {
+
     namespace = "androidlead.weatherappui"
     compileSdk = 35
 
@@ -53,11 +53,13 @@ android {
     }
 }
 
+
 dependencies {
     implementation(libs.bundles.androidX)
 
     implementation(platform(libs.compose.bom))
     implementation(libs.transport.runtime)
+    implementation(libs.androidx.benchmark.traceprocessor.android)
     debugImplementation(libs.compose.tooling)
     implementation(libs.bundles.ui)
     implementation(libs.androidx.navigation.compose)
@@ -69,14 +71,15 @@ dependencies {
     // Room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    kapt(libs.room.compiler)  // kapt نه ksp برای Room
+    ksp(libs.hilt.android.compiler)       // ✅ Add this line instead
 
     // Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    ksp(libs.androidx.hilt.compiler)     // ✅ Add this line instead
 
     implementation(libs.androidx.hilt.navigation.compose)
-    kapt(libs.androidx.hilt.compiler)
+    ksp(libs.room.compiler)      // ✅ Add this line instead
     implementation(libs.okhttp3.logging.interceptor)
+    implementation(libs.javapoet) // اضافه‌شده برای حل خطای canonicalName
 
 }

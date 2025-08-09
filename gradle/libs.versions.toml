@@ -1,23 +1,26 @@
 [versions]
-agp = "8.6.1"
-kotlin = "1.9.23"
+agp = "8.6.0"
+kotlin = "2.0.0"
 androidx-core = "1.16.0"
-androidx-runtime = "2.9.1"
+androidx-runtime = "2.9.2"
 compose-activity = "1.10.1"
-compose-bom = "2025.06.00"
+compose-bom = "2025.07.00"
 compose-constrain-layout = "1.1.1"
 navigation-compose = "2.9.0"
 retrofit = "3.0.0"
 okhttpLoggingInterceptor = "4.12.0"
 converter-gson = "3.0.0"
-room = "2.7.1"
-ksp = "1.9.23-1.0.20"
+room = "2.7.2"
+ksp = "2.0.0-1.0.21"
 transport-runtime = "4.0.0"
 hiltAndroid = "2.51.1"
 hiltNavigationCompose = "1.2.0"
+benchmarkTraceprocessorAndroid = "1.4.0"
+javapoet = "1.13.0"
 
 
 [libraries]
+javapoet = { group = "com.squareup", name = "javapoet", version.ref = "javapoet" }
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
 androidx-lifecycle = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-runtime" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
@@ -47,6 +50,7 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroid" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltNavigationCompose" }
+androidx-benchmark-traceprocessor-android = { group = "androidx.benchmark", name = "benchmark-traceprocessor-android", version.ref = "benchmarkTraceprocessorAndroid" }
 
 [bundles]
 androidX = ["androidx-core", "androidx-lifecycle"]
@@ -58,5 +62,5 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version = "2.1.21" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose",version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

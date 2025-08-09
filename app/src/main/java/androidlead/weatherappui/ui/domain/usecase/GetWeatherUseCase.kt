@@ -1,19 +1,23 @@
 package androidlead.weatherappui.ui.domain.usecase
 
-import kotlinx.coroutines.flow.Flow
 import androidlead.weatherappui.ui.domain.model.CurrentWeather
 import androidlead.weatherappui.ui.domain.model.DailyForecast
 import androidlead.weatherappui.ui.domain.repository.WeatherRepository
-import androidlead.weatherappui.ui.domain.util.Resource // Corrected import from Result to Resource
+import androidlead.weatherappui.ui.domain.util.Resource
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-// Use Case for fetching all weather information (current and forecast)
+/**
+ * UseCase برای دریافت اطلاعات آب‌وهوا (وضعیت فعلی + پیش‌بینی)
+ */
 class GetWeatherUseCase @Inject constructor(
     private val repository: WeatherRepository
 ) {
-    // Operator function allows calling the use case like a function (e.g., getWeatherUseCase("Tehran"))
+
+    /**
+     * اجرای مستقیم use case با `invoke("Tehran")`
+     */
     operator fun invoke(location: String): Flow<Resource<Pair<CurrentWeather, List<DailyForecast>>>> {
-        // Corrected to call the appropriate repository method
-        return repository.getCurrentAndFiveDayForecast(location)
+        return repository.getWeatherData(location)
     }
 }
