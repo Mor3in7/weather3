@@ -7,6 +7,16 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+import java.util.Properties
+import java.io.FileInputStream
+
+// Load properties from local.properties
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+
 android {
     namespace = "androidlead.weatherappui"
     compileSdk = 35
@@ -18,6 +28,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         vectorDrawables { useSupportLibrary = true }
+        buildConfigField("String", "WEATHER_API_KEY", "\"${localProperties.getProperty("weather.api.key")}\"")
     }
 
     buildTypes {
@@ -36,7 +47,10 @@ android {
     }
     kotlinOptions { jvmTarget = "17" }
 
-    buildFeatures { compose = true }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
 
     packaging {
         resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" }
@@ -74,6 +88,7 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler) // <-- CRITICAL: This line was missing
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.coil.compose)
 
     // The 'transport' and 'benchmark' libraries were removed from the TOML file.
     // They must be removed from here as well.

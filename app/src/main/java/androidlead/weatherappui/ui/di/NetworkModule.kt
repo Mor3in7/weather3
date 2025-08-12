@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import androidlead.weatherappui.ui.data.remote.api.WeatherApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Singleton
+import androidlead.weatherappui.BuildConfig
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 
@@ -17,7 +18,6 @@ import okhttp3.MediaType.Companion.toMediaType
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val WEATHER_API_KEY = "af90d1f1ee1e47608e0105059250807"
     private const val BASE_URL = "https://api.weatherapi.com/"
 
     @Provides
@@ -33,7 +33,7 @@ object NetworkModule {
             .addInterceptor { chain ->
                 val request = chain.request()
                 val newUrl = request.url.newBuilder()
-                    .addQueryParameter("key", WEATHER_API_KEY)
+                    .addQueryParameter("key", BuildConfig.WEATHER_API_KEY)
                     .build()
                 chain.proceed(request.newBuilder().url(newUrl).build())
             }

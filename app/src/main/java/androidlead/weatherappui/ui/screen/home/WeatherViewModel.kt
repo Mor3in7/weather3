@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,24 +41,34 @@ class WeatherViewModel @Inject constructor(
         repository.getWeatherData(city).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
-                    _uiState.value = WeatherUiState(
-                        isLoading = true,
-                        currentWeather = result.data?.first,
-                        dailyForecasts = result.data?.second ?: emptyList()
-                    )
+                    _uiState.update {
+                        it.copy(
+                            isLoading = true,
+                            currentWeather = result.data?.first,
+                            dailyForecasts = result.data?.second ?: emptyList(),
+                            error = null
+                        )
+                    }
                 }
                 is Resource.Success -> {
-                    _uiState.value = WeatherUiState(
-                        currentWeather = result.data?.first,
-                        dailyForecasts = result.data?.second ?: emptyList()
-                    )
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            currentWeather = result.data?.first,
+                            dailyForecasts = result.data?.second ?: emptyList(),
+                            error = null
+                        )
+                    }
                 }
                 is Resource.Error -> {
-                    _uiState.value = WeatherUiState(
-                        error = result.message,
-                        currentWeather = result.data?.first,
-                        dailyForecasts = result.data?.second ?: emptyList()
-                    )
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = result.message,
+                            currentWeather = result.data?.first,
+                            dailyForecasts = result.data?.second ?: emptyList()
+                        )
+                    }
                 }
             }
         }.launchIn(viewModelScope)

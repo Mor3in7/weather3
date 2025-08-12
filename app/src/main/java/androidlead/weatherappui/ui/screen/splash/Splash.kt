@@ -6,28 +6,25 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidlead.weatherappui.ui.auth.SessionDataStore
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import kotlinx.coroutines.flow.first
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun Splash(
-    session: SessionDataStore,
     onNavigateToLogin: () -> Unit,
-    onNavigateToWeather: () -> Unit
+    onNavigateToWeather: () -> Unit,
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
-    val isLoggedIn = session.isLoggedIn.collectAsState(initial = false).value
-    val isInitialized = remember { mutableStateOf(false) }
+    val isLoggedIn by viewModel.isLoggedIn.collectAsState()
 
-    LaunchedEffect(Unit) {
-        val loggedIn = session.isLoggedIn.first()
-        if (loggedIn) {
-            onNavigateToWeather()
-        } else {
-            onNavigateToLogin()
+    LaunchedEffect(isLoggedIn) {
+        // We wait until isLoggedIn is not null to navigate.
+        when (isLoggedIn) {
+            true -> onNavigateToWeather()
+            false -> onNavigateToLogin()
+            null -> { /* Do nothing, wait for initial value */ }
         }
     }
 

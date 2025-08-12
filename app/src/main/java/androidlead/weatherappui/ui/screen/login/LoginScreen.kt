@@ -26,7 +26,7 @@ import androidlead.weatherappui.ui.theme.cuLightBlue
 import androidlead.weatherappui.ui.theme.cuOrange
 
 @Composable
-fun LOGin2(
+fun LoginScreen(
     onLoginSuccess: () -> Unit = {},
     onSignUpClick: () -> Unit = {}
 ) {

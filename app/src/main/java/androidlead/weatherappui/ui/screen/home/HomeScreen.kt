@@ -48,6 +48,9 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
+import androidlead.weatherappui.ui.screen.util.customShadow
+import androidlead.weatherappui.ui.screen.util.fromHex
+import coil.compose.AsyncImage
 
 
 @Composable
@@ -393,7 +396,7 @@ fun DailyForecastCard(
     ConstraintLayout(
         modifier = modifier.fillMaxWidth()
     ) {
-        val (forecastImage, forecastValue, background) = createRefs()
+        val (forecastImage, forecastValue, background, description, lastUpdated) = createRefs()
         CardBackground(
             modifier = Modifier.constrainAs(background) {
                 linkTo(
@@ -421,9 +424,9 @@ fun DailyForecastCard(
             style = MaterialTheme.typography.titleLarge,
             color = ColorTextSecondary,
             fontWeight = FontWeight.Medium,
-            modifier = Modifier.constrainAs(createRef()) {
+            modifier = Modifier.constrainAs(description) {
                 start.linkTo(anchor = parent.start, margin = 24.dp)
-                top.linkTo(anchor = forecastImage.bottom)
+                top.linkTo(anchor = forecastImage.bottom, margin = 8.dp)
             }
         )
         Text(
@@ -431,9 +434,9 @@ fun DailyForecastCard(
             style = MaterialTheme.typography.bodyMedium,
             color = ColorTextSecondaryVariant,
             modifier = Modifier
-                .constrainAs(createRef()) {
-                    start.linkTo(anchor = createRef().start)
-                    top.linkTo(anchor = createRef().bottom)
+                .constrainAs(lastUpdated) {
+                    start.linkTo(anchor = description.start)
+                    top.linkTo(anchor = description.bottom, margin = 4.dp)
                 }
                 .padding(bottom = 24.dp)
         )
@@ -644,14 +647,14 @@ private fun WeatherImage(
     modifier: Modifier = Modifier,
     imageUrl: String
 ) {
-    Box(
+    AsyncImage(
+        model = imageUrl,
+        contentDescription = "Weather Icon",
         modifier = modifier
             .fillMaxWidth()
             .height(60.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "Icon", modifier = Modifier.size(60.dp))
-    }
+        contentScale = ContentScale.Crop
+    )
 }
 
 @Composable
@@ -677,48 +680,5 @@ private fun AirQualityIndicator(
                 style = MaterialTheme.typography.labelSmall,
             )
         }
-    }
-}
-fun Color.Companion.fromHex(hex: String): Color {
-    return try {
-        Color(android.graphics.Color.parseColor(hex))
-    } catch (e: IllegalArgumentException) {
-        Color.Black
-    }
-}
-
-@Stable
-fun Modifier.customShadow(
-    color: Color = Color.Black,
-    alpha: Float = 0.5f,
-    borderRadius: Dp = 0.dp,
-    shadowRadius: Dp = 0.dp,
-    offsetY: Dp = 0.dp,
-    offsetX: Dp = 0.dp
-) = drawBehind {
-
-    val shadowColor = color.copy(alpha = alpha).toArgb()
-    val transparent = color.copy(alpha = 0f).toArgb()
-
-    this.drawIntoCanvas {
-        val paint = Paint()
-        val frameworkPaint = paint.asFrameworkPaint()
-        frameworkPaint.color = transparent
-
-        frameworkPaint.setShadowLayer(
-            shadowRadius.toPx(),
-            offsetX.toPx(),
-            offsetY.toPx(),
-            shadowColor
-        )
-        it.drawRoundRect(
-            0f,
-            0f,
-            this.size.width,
-            this.size.height,
-            borderRadius.toPx(),
-            borderRadius.toPx(),
-            paint
-        )
     }
 }
