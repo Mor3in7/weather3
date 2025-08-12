@@ -1,47 +1,61 @@
-    package androidlead.weatherappui.ui.navigation
+package androidlead.weatherappui.ui.navigation
 
-    import androidlead.weatherappui.ui.screen.weather.WeatherScreen
-    import androidlead.weatherappui.ui.screen.login.LOGin2
-    import androidlead.weatherappui.ui.screen.signup.SignUp
-    import androidx.compose.runtime.Composable
-    import androidx.navigation.compose.NavHost
-    import androidx.navigation.compose.composable
-    import androidx.navigation.compose.rememberNavController
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidlead.weatherappui.ui.auth.SessionDataStore
+import androidlead.weatherappui.ui.screen.login.LOGin2
+import androidlead.weatherappui.ui.screen.signup.SignUp
+import androidlead.weatherappui.ui.screen.home.HomeScreen
+import androidx.compose.runtime.remember
+import androidlead.weatherappui.ui.screen.splash.Splash
 
-    @Composable
-    fun Appnav() {
-        val navController = rememberNavController()
+@Composable
+fun Appnav() {
+    val navController = rememberNavController()
+    val context = LocalContext.current
+    val session = remember { SessionDataStore(context) }
 
-        NavHost(navController = navController, startDestination = "weatherscreen") {
-
-            // Login screen
-            composable("login") {
-                LOGin2(
-                    onLoginClick = {
-                        navController.navigate("weatherscreen") {
-                            popUpTo("login") { inclusive = true }
-                        }
-                    },
-                    onSignUpClick = {
-                        navController.navigate("signup")
+    NavHost(navController = navController, startDestination = "splash") {
+        composable("splash") {
+            Splash(
+                session = session,
+                onNavigateToLogin = {
+                    navController.navigate("login") {
+                        popUpTo("splash") { inclusive = true }
                     }
-                )
-            }
-
-            // Sign Up screen
-            composable("signup") {
-                SignUp(
-                    onSignUp_to_wescreen = {
-                        navController.navigate("weatherscreen") {
-                            popUpTo("login") { inclusive = true } // Pop up to login to clear back stack
-                        }
+                },
+                onNavigateToWeather = {
+                    navController.navigate("home") {
+                        popUpTo("splash") { inclusive = true }
                     }
-                )
-            }
+                }
+            )
+        }
 
-            // Weather screen
-            composable("weatherscreen") {
-                WeatherScreen()
-            }
+        composable("home") { HomeScreen() }
+
+        composable("login") {
+            LOGin2(
+                onLoginSuccess = {
+                    navController.navigate("home") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                },
+                onSignUpClick = { navController.navigate("signup") }
+            )
+        }
+
+        composable("signup") {
+            SignUp(
+                onSignUpSuccess = {
+                    navController.navigate("home") {
+                        popUpTo("signup") { inclusive = true }
+                    }
+                }
+            )
         }
     }
+}

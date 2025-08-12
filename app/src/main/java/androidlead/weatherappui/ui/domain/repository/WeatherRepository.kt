@@ -6,11 +6,6 @@ import androidlead.weatherappui.ui.domain.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepository {
-
-    /**
-     * دریافت وضعیت فعلی و پیش‌بینی چندروزه برای یک شهر.
-     */
-    fun getWeatherData(
-        location: String
-    ): Flow<Resource<Pair<CurrentWeather, List<DailyForecast>>>>
+    fun getWeatherData(location: String): Flow<Resource<Pair<CurrentWeather, List<DailyForecast>>>>
+    suspend fun searchCities(query: String): List<String>
 }

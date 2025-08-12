@@ -24,21 +24,16 @@ data class CurrentDto(
     @SerialName("feelslike_c")
     val feelsLikeC: Float,
     val condition: ConditionDto,
-    // for Air Quality
     @SerialName("wind_kph")
     val windKph: Float,
     val humidity: Int,
     val uv: Float,
     @SerialName("air_quality")
-    val airQuality:     AirQualityDto,
-
-    // theme switching
+    val airQuality: AirQualityDto? = null,
     @SerialName("is_day")
     val isDay: Int,
-
     @SerialName("last_updated")
     val lastUpdated: String
-
 )
 
 @Serializable
@@ -52,6 +47,7 @@ data class AirQualityDto(
     val o3: Float?,
     val so2: Float?,
     val co: Float?,
+    @SerialName("pm2_5")
     val pm25: Float
 )
 
@@ -72,11 +68,13 @@ data class DayDto(
     val maxTempC: Float,
     @SerialName("mintemp_c")
     val minTempC: Float,
+    @SerialName("avgtemp_c")
+    val avgTempC: Float,
     @SerialName("daily_chance_of_rain")
     val dailyChanceOfRain: Float,
     val condition: ConditionFDto,
-    @SerialName("avgtemp_c") // Added avgtemp_c as it's often available in forecast DTOs
-    val avgTempC: Float,
+    @SerialName("air_quality")
+    val airQuality: AirQualityDto? = null
 )
 
 @Serializable

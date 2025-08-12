@@ -30,8 +30,9 @@ class WeatherRepositoryImpl @Inject constructor(
         val isCurrentValid = currentWeatherEntity?.timestamp?.let { !isDataStale(it) } ?: false
         val isForecastValid = forecastEntities.firstOrNull()?.timestamp?.let { !isDataStale(it) } ?: false
 
-        if (isCurrentValid && isForecastValid) {
-            emit(Resource.Success(Pair(localCurrent!!, localForecast)))
+        if (isCurrentValid && isForecastValid && localCurrent != null) {
+            emit(Resource.Success(Pair(localCurrent, localForecast)))
+            return@flow
         }
 
         try {
@@ -39,7 +40,6 @@ class WeatherRepositoryImpl @Inject constructor(
 
             if (response.isSuccessful && response.body() != null) {
                 val dto = response.body()!!
-
                 val current = dto.toCurrentWeather()
                 val forecast = dto.toDailyForecasts()
 
@@ -50,18 +50,19 @@ class WeatherRepositoryImpl @Inject constructor(
 
                 emit(Resource.Success(Pair(current, forecast)))
             } else {
-                emit(Resource.Error("API Error: ${response.code()} ${response.message()}",
-                    if (localCurrent != null) Pair(localCurrent, localForecast) else null
+                emit(Resource.Error(
+                    "API Error: ${response.code()} ${response.message()}",
+                    localCurrent?.let { Pair(it, localForecast) }
                 ))
             }
 
         } catch (e: IOException) {
             emit(Resource.Error("Network error: ${e.message}",
-                if (localCurrent != null) Pair(localCurrent, localForecast) else null
+                localCurrent?.let { Pair(it, localForecast) }
             ))
         } catch (e: Exception) {
             emit(Resource.Error("Unexpected error: ${e.message}",
-                if (localCurrent != null) Pair(localCurrent, localForecast) else null
+                localCurrent?.let { Pair(it, localForecast) }
             ))
         }
     }
@@ -69,5 +70,16 @@ class WeatherRepositoryImpl @Inject constructor(
     private fun isDataStale(timestamp: Long): Boolean {
         val THIRTY_MIN = 30 * 60 * 1000L
         return System.currentTimeMillis() - timestamp > THIRTY_MIN
+    }
+
+    override suspend fun searchCities(query: String): List<String> {
+        return try {
+            val res = api.searchCities(query)
+            if (res.isSuccessful) {
+                res.body()?.map { it.name } ?: emptyList()
+            } else emptyList()
+        } catch (_: Exception) {
+            emptyList()
+        }
     }
 }

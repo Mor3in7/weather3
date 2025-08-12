@@ -1,7 +1,5 @@
 package androidlead.weatherappui.ui.screen.home
 
-import androidx.compose.foundation.lazy.items
-
 import androidlead.weatherappui.R
 import androidlead.weatherappui.ui.theme.ColorGradient1
 import androidlead.weatherappui.ui.theme.ColorGradient2
@@ -17,7 +15,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -65,7 +63,7 @@ fun ActionBar(
         horizontalArrangement = Arrangement.Absolute.SpaceBetween
     ) {
 
-            ControlButton()
+        ControlButton()
 
         Column(horizontalAlignment = Alignment.CenterHorizontally,) {
             Spacer(modifier = Modifier.padding(top = 44.dp))
@@ -73,7 +71,7 @@ fun ActionBar(
                 verticalAlignment = Alignment.CenterVertically) {
 
                 Image(painterResource(id = R.drawable.baseline_location_on_24), contentDescription = "location",modifier= Modifier
-                .size(38.dp))
+                    .size(38.dp))
                 CitySelectorDialog()
             }
 
@@ -239,4 +237,3 @@ fun CitySelectorDialog() {
         }
     }
 }
-

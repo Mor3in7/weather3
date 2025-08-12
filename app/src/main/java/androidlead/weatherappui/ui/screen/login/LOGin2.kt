@@ -17,26 +17,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidlead.weatherappui.R
+import androidlead.weatherappui.ui.screen.auth.AuthViewModel
 import androidlead.weatherappui.ui.theme.cuLightBlue
 import androidlead.weatherappui.ui.theme.cuOrange
 
-@Preview
 @Composable
 fun LOGin2(
-    onLoginClick: () -> Unit = {},
-    onSignUpClick: () -> Unit = {}) {
+    onLoginSuccess: () -> Unit = {},
+    onSignUpClick: () -> Unit = {}
+) {
+    val vm: AuthViewModel = hiltViewModel()
+    val ui = vm.ui.collectAsState().value
+
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val showPassword = remember { mutableStateOf(false) }
-    val errorMessage = remember { mutableStateOf<String?>(null) }
+    val fieldError = remember { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(username.value) {
-        delay(1500)
+    fun validate(): Boolean {
+        if (username.value.isBlank()) { fieldError.value = "Username is required"; return false }
+        if (password.value.isBlank()) { fieldError.value = "Password is required"; return false }
+        fieldError.value = null
+        return true
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -97,10 +103,10 @@ fun LOGin2(
                             onValueChange = {
                                 if (it.length <= 25) {
                                     username.value = it
-                                    errorMessage.value = null
+                                    fieldError.value = null
                                 } else {
-                                    errorMessage.value = "Max character limit is 25"
-                                }   
+                                    fieldError.value = "Max character limit is 25"
+                                }
                             },
                             label = { Text("Username", color = Color.White) },
                             colors = OutlinedTextFieldDefaults.colors(
@@ -109,18 +115,18 @@ fun LOGin2(
                                 cursorColor = Color.White,
                                 focusedTextColor = Color.White,
                                 unfocusedTextColor = Color.White,
-                                focusedLabelColor = Color.Red,
+                                focusedLabelColor = Color.Yellow,
                                 unfocusedLabelColor = Color.White,
                                 unfocusedContainerColor = Color.Transparent,
                                 focusedContainerColor = Color.Transparent,
                                 disabledContainerColor = Color.Transparent,
                                 errorBorderColor = Color.Red,
                                 errorTextColor = Color.Red,
-                                errorLabelColor   = Color.Red,
+                                errorLabelColor = Color.Red,
                                 errorTrailingIconColor = Color.Red
                             ),
                             trailingIcon = {
-                                if (!errorMessage.value.isNullOrBlank()) {
+                                if (!fieldError.value.isNullOrBlank()) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.baseline_error_outline_24),
                                         contentDescription = "Error",
@@ -132,12 +138,13 @@ fun LOGin2(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
                             singleLine = true,
-                            isError = !errorMessage.value.isNullOrBlank(),
+                            isError = !fieldError.value.isNullOrBlank(),
                             supportingText = {
-                                if (!errorMessage.value.isNullOrBlank()) {
-                                    Text(errorMessage.value!!, color = Color.Red)
+                                if (!fieldError.value.isNullOrBlank()) {
+                                    Text(fieldError.value!!, color = Color.Red)
                                 }
-                            }
+                            },
+                            enabled = !ui.loading
                         )
 
                         Spacer(modifier = Modifier.height(10.dp))
@@ -168,33 +175,53 @@ fun LOGin2(
                             trailingIcon = {
                                 IconButton(
                                     onClick = { showPassword.value = !showPassword.value },
-                                    modifier = Modifier.size(32.dp).padding(end = 10.dp)
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .padding(end = 10.dp)
                                 ) {
                                     Icon(
                                         tint = Color.Cyan,
-                                        painter = painterResource(id = if (showPassword.value) R.drawable.hide else R.drawable.unhide),
+                                        painter = painterResource(
+                                            id = if (showPassword.value) R.drawable.hide else R.drawable.unhide
+                                        ),
                                         contentDescription = null
                                     )
                                 }
                             },
-                            visualTransformation = if (showPassword.value) VisualTransformation.None else PasswordVisualTransformation()
+                            visualTransformation = if (showPassword.value) VisualTransformation.None else PasswordVisualTransformation(),
+                            enabled = !ui.loading
                         )
 
                         Spacer(modifier = Modifier.height(10.dp))
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            TextButton(onClick = { }) {
+                            TextButton(onClick = { /* help */ }, enabled = !ui.loading) {
                                 Text(text = "Need Help?", fontSize = 12.sp, color = Color(0xFFFFF085))
                             }
                             Button(
-                                onClick = onLoginClick,
+                                onClick = {
+                                    if (!validate()) return@Button
+                                    vm.login(username.value, password.value) {
+                                        onLoginSuccess()
+                                    }
+                                },
                                 colors = ButtonDefaults.buttonColors(containerColor = cuOrange),
-                                shape = RoundedCornerShape(12.dp)
+                                shape = RoundedCornerShape(12.dp),
+                                enabled = !ui.loading
                             ) {
-                                Text(text = "Login", color = Color.White, fontWeight = FontWeight.Bold)
+                                if (ui.loading) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(18.dp),
+                                        strokeWidth = 2.dp,
+                                        color = Color.White
+                                    )
+                                } else {
+                                    Text(text = "Login", color = Color.White, fontWeight = FontWeight.Bold)
+                                }
                             }
                         }
 
@@ -212,9 +239,10 @@ fun LOGin2(
                             onClick = onSignUpClick,
                             colors = ButtonDefaults.buttonColors(containerColor = cuOrange),
                             shape = RoundedCornerShape(12.dp),
-                            modifier =
-                                Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 4.dp)
-
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 40.dp, vertical = 4.dp),
+                            enabled = !ui.loading
                         ) {
                             Text(
                                 text = "Sign Up",
@@ -222,6 +250,11 @@ fun LOGin2(
                                 fontSize = 18.sp,
                                 letterSpacing = 1.4.sp
                             )
+                        }
+
+                        ui.error?.let {
+                            Spacer(Modifier.height(8.dp))
+                            Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                         }
                     }
                 }

@@ -2,24 +2,25 @@ package androidlead.weatherappui.ui.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Index
 
-// انتیتی Room برای ذخیره پیش‌بینی روزانه
-@Entity(tableName = "daily_forecast_table")
+@Entity(
+    tableName = "daily_forecast_table",
+    indices = [Index(value = ["city", "date"], unique = false)]
+)
 data class DailyForecastEntity(
-    @PrimaryKey(autoGenerate = true) // Auto-generate ID for each forecast entry
+    @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val city: String, // Foreign key to link with CurrentWeatherEntity
+    val city: String,
     val dayOfWeek: String,
     val date: String,
     val maxTemp: Float,
     val minTemp: Float,
-    val avgTemp: Float, // Added avgTemp as it's in the DTOq
+    val avgTemp: Float,
     val conditionText: String,
     val iconUrl: String,
     val dailyChanceOfRain: Float,
-    val airQualityIpm25: Float,
+    val airQualityPm25: Float,
     val airQualityIndicatorColorHex: String,
-    val timestamp: Long // Added timestamp for staleness check
-
+    val timestamp: Long
 )
-

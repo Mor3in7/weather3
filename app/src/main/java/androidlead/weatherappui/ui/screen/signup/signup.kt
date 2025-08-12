@@ -1,85 +1,94 @@
 package androidlead.weatherappui.ui.screen.signup
 
 import android.util.Patterns
-import android.widget.Toast
-import androidlead.weatherappui.R
-import androidlead.weatherappui.ui.theme.cuLightBlue
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidlead.weatherappui.R
+import androidlead.weatherappui.ui.screen.auth.AuthViewModel
+import androidlead.weatherappui.ui.theme.cuLightBlue
 import kotlinx.coroutines.delay
 
-@Preview(showBackground = true)
 @Composable
-fun SignUp(onSignUp_to_wescreen: () -> Unit = {}) {
+fun SignUp(
+    onSignUpSuccess: () -> Unit = {}
+) {
+    val vm: AuthViewModel = hiltViewModel()
+    val ui = vm.ui.collectAsState().value
+
     val username = remember { mutableStateOf("") }
-    val emailInput = remember { mutableStateOf("") } // برای debounce
+    val emailInput = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
+
     val isPasswordVisible = remember { mutableStateOf(false) }
     val isConfirmPasswordVisible = remember { mutableStateOf(false) }
-    val context = LocalContext.current
+
     val usernameError = remember { mutableStateOf("") }
     val passwordError = remember { mutableStateOf("") }
     val confirmPasswordError = remember { mutableStateOf("") }
-    val emailError = remember { mutableStateOf("") } // خطای ایمیل
+    val emailError = remember { mutableStateOf("") }
 
-    // DEBOUNCE برای ایمیل
     LaunchedEffect(emailInput.value) {
-        delay(1500) // 1.5 ثانیه تأخیر
-        if (emailInput.value.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(emailInput.value).matches()) {
-            emailError.value = "Example: example@gmail.com"
-        } else {
-            emailError.value = ""
-        }
+        delay(500)
+        emailError.value =
+            if (emailInput.value.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(emailInput.value).matches())
+                "Example: example@gmail.com"
+            else ""
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        // Background image
+    fun validate(): Boolean {
+        var ok = true
+
+        usernameError.value = when {
+            username.value.isBlank() -> { ok = false; "Username is required" }
+            username.value.length > 25 -> { ok = false; "Max character limit is 25" }
+            else -> ""
+        }
+
+        emailError.value = when {
+            emailInput.value.isBlank() -> { ok = false; "Email is required" }
+            !Patterns.EMAIL_ADDRESS.matcher(emailInput.value).matches() -> { ok = false; "Invalid email" }
+            else -> ""
+        }
+
+        passwordError.value = when {
+            password.value.isBlank() -> { ok = false; "Password is required" }
+            password.value.length < 8 -> { ok = false; "Password must be between 8–25 characters" }
+            password.value.length > 25 -> { ok = false; "Password must be between 8–25 characters" }
+            else -> ""
+        }
+
+        confirmPasswordError.value = when {
+            confirmPassword.value.isBlank() -> { ok = false; "Confirm your password" }
+            confirmPassword.value != password.value -> { ok = false; "Passwords do not match" }
+            else -> ""
+        }
+
+        return ok
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.night),
             contentDescription = null,
@@ -87,10 +96,7 @@ fun SignUp(onSignUp_to_wescreen: () -> Unit = {}) {
             modifier = Modifier.fillMaxSize()
         )
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+        Box(Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -121,90 +127,117 @@ fun SignUp(onSignUp_to_wescreen: () -> Unit = {}) {
                     item {
                         CustomOutlinedField(
                             value = username.value,
-                            onValueChange = {if (it.length <= 25)
-                                username.value = it
-                                usernameError.value = if (it.length > 25) "Max character limit reached" else ""
-
+                            onValueChange = {
+                                if (it.length <= 25) {
+                                    username.value = it
+                                    usernameError.value = if (it.isBlank()) "Username is required" else ""
+                                }
                             },
                             label = "Username",
                             iconRes = R.drawable.username,
-
                             isError = usernameError.value.isNotEmpty(),
                             supportingText = usernameError.value,
-
+                            enabled = !ui.loading
                         )
                     }
 
                     item {
                         CustomOutlinedField(
                             value = emailInput.value,
-                            onValueChange = {
-                                emailInput.value = it
-                            },
+                            onValueChange = { emailInput.value = it },
                             label = "Email Address",
                             iconRes = R.drawable.email,
                             isError = emailError.value.isNotEmpty(),
-                            supportingText = emailError.value
+                            supportingText = emailError.value,
+                            enabled = !ui.loading
                         )
                     }
 
                     item {
                         CustomOutlinedField(
                             value = password.value,
-                            onValueChange = {if(it.length<=25)
-                                password.value = it
-                                passwordError.value = if (it.length > 25) "Max character limit reached" else if (it.length < 8) "Password must  be between 8-25 characters" else ""
-                                // تطبیق مجدد با confirmPassword
+                            onValueChange = {
+                                if (it.length <= 25) {
+                                    password.value = it
+                                    passwordError.value = when {
+                                        it.isBlank() -> "Password is required"
+                                        it.length < 8 -> "Password must be between 8–25 characters"
+                                        else -> ""
+                                    }
+                                }
                             },
                             label = "Password",
                             icon = Icons.Default.Lock,
                             isPassword = true,
                             visible = isPasswordVisible,
                             isError = passwordError.value.isNotEmpty(),
-                            supportingText = passwordError.value
+                            supportingText = passwordError.value,
+                            enabled = !ui.loading
                         )
                     }
 
                     item {
                         CustomOutlinedField(
                             value = confirmPassword.value,
-                            onValueChange = {if(it.length<=25)
-                                confirmPassword.value = it
-                                confirmPasswordError.value = if (it != password.value) "Passwords do not match" else ""
+                            onValueChange = {
+                                if (it.length <= 25) {
+                                    confirmPassword.value = it
+                                    confirmPasswordError.value =
+                                        if (it != password.value) "Passwords do not match" else ""
+                                }
                             },
                             label = "Confirm Password",
                             icon = Icons.Default.Lock,
                             isPassword = true,
                             visible = isConfirmPasswordVisible,
                             isError = confirmPasswordError.value.isNotEmpty(),
-                            supportingText = confirmPasswordError.value
+                            supportingText = confirmPasswordError.value,
+                            enabled = !ui.loading
                         )
                     }
 
                     item {
                         Button(
                             onClick = {
-                                if (usernameError.value.isNullOrBlank() || password.value.isNullOrBlank() || emailInput.value.isNullOrBlank() || confirmPassword.value.isNullOrBlank()) {
-                                    Toast.makeText(
-                                        context,
-                                        "Plz Fill Your data",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                } else {
-                                    onSignUp_to_wescreen()
+                                if (!validate()) return@Button
+                                vm.signUp(
+                                    username = username.value.trim(),
+                                    email = emailInput.value.trim(),
+                                    password = password.value
+                                ) {
+                                    onSignUpSuccess()
                                 }
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(50.dp),
                             shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = cuLightBlue)
+                            colors = ButtonDefaults.buttonColors(containerColor = cuLightBlue),
+                            enabled = !ui.loading
                         ) {
+                            if (ui.loading) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(22.dp),
+                                    strokeWidth = 2.dp,
+                                    color = Color.White
+                                )
+                            } else {
+                                Text(
+                                    text = "Sign Up",
+                                    color = Color.White,
+                                    fontSize = 18.sp,
+                                    letterSpacing = 1.4.sp
+                                )
+                            }
+                        }
+                    }
+
+                    item {
+                        ui.error?.let {
                             Text(
-                                text = "Sign Up",
-                                color = Color.White,
-                                fontSize = 18.sp,
-                                letterSpacing = 1.4.sp
+                                text = it,
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodySmall
                             )
                         }
                     }
@@ -224,12 +257,14 @@ fun CustomOutlinedField(
     isPassword: Boolean = false,
     visible: MutableState<Boolean>? = null,
     isError: Boolean = false,
-    supportingText: String = ""
+    supportingText: String = "",
+    enabled: Boolean = true
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         isError = isError,
+        enabled = enabled,
         label = { Text(label, color = Color.White) },
         leadingIcon = {
             when {
@@ -252,7 +287,6 @@ fun CustomOutlinedField(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // 1) Always show error icon when there's an error
                 if (isError) {
                     Icon(
                         painter = painterResource(id = R.drawable.baseline_error_outline_24),
@@ -261,7 +295,6 @@ fun CustomOutlinedField(
                         modifier = Modifier.size(20.dp)
                     )
                 }
-                // 2) If this is a password field, show the eye toggle
                 if (isPassword && visible != null) {
                     IconButton(onClick = { visible.value = !visible.value }) {
                         Icon(

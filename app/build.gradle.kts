@@ -1,13 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
 
 android {
-
     namespace = "androidlead.weatherappui"
     compileSdk = 35
 
@@ -17,10 +17,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        vectorDrawables { useSupportLibrary = true }
     }
 
     buildTypes {
@@ -32,54 +29,52 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-    buildFeatures {
-        compose = true
-    }
-    // اگر از BOM استفاده می‌کنی، این خط را می‌تونی حذف کنی یا نسخه را بروز کن
-    //composeOptions {
-    //    kotlinCompilerExtensionVersion = "1.5.3"
-    //}
+    kotlinOptions { jvmTarget = "17" }
+
+    buildFeatures { compose = true }
+
     packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+        resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" }
     }
 }
 
-
 dependencies {
-    implementation(libs.bundles.androidX)
+    // Use the corrected bundle name: 'core'
+    implementation(libs.bundles.core)
 
+    // Compose
     implementation(platform(libs.compose.bom))
-    implementation(libs.transport.runtime)
-    implementation(libs.androidx.benchmark.traceprocessor.android)
+    // Use the corrected bundle name: 'compose'
+    implementation(libs.bundles.compose)
     debugImplementation(libs.compose.tooling)
-    implementation(libs.bundles.ui)
     implementation(libs.androidx.navigation.compose)
 
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.androidx.core)
+    // DataStore + Coroutines
+    implementation(libs.androidx.datastore.preferences)
+    // Use the coroutines bundle for cleaner code
+    implementation(libs.bundles.coroutines)
 
-    // Room
+    // Networking (Serialization)
+    implementation(libs.retrofit)
+    implementation(libs.okhttp3.logging.interceptor)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+
+    // Room (with KSP)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
-    ksp(libs.hilt.android.compiler)       // ✅ Add this line instead
+    ksp(libs.room.compiler)
 
-    // Hilt
+    // Hilt - The Hilt compiler was missing!
     implementation(libs.hilt.android)
-    ksp(libs.androidx.hilt.compiler)     // ✅ Add this line instead
-
+    ksp(libs.hilt.android.compiler) // <-- CRITICAL: This line was missing
     implementation(libs.androidx.hilt.navigation.compose)
-    ksp(libs.room.compiler)      // ✅ Add this line instead
-    implementation(libs.okhttp3.logging.interceptor)
-    implementation(libs.javapoet) // اضافه‌شده برای حل خطای canonicalName
 
+    // The 'transport' and 'benchmark' libraries were removed from the TOML file.
+    // They must be removed from here as well.
 }

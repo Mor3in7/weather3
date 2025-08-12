@@ -1,14 +1,11 @@
-// androidlead.weatherappui.ui.data.local.entity/CurrentWeather.kt
 package androidlead.weatherappui.ui.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-// انتیتی Room برای ذخیره آب و هوای فعلی
 @Entity(tableName = "current_weather_table")
 data class CurrentWeatherEntity(
-    @PrimaryKey(autoGenerate = false)
-    val id: Int = 0,
+    @PrimaryKey
     val city: String,
     val temperature: Float,
     val feelsLike: Float,
@@ -21,6 +18,5 @@ data class CurrentWeatherEntity(
     val so2: Float?,
     val co: Float?,
     val lastUpdated: String,
-    val timestamp: Long // Added timestamp for staleness check
-
+    val timestamp: Long
 )

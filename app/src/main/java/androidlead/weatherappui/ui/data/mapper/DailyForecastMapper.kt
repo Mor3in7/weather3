@@ -6,20 +6,19 @@ import androidlead.weatherappui.ui.domain.model.DailyForecast
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-// --- 1. WeatherDto → List<DailyForecast> (Domain)
 fun WeatherDto.toDailyForecasts(): List<DailyForecast> {
     return forecast.forecastday.map { day ->
         val date = day.date
         val parsedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date)
-        val dayOfWeek = if (parsedDate != null) {
-            SimpleDateFormat("EEE", Locale.getDefault()).format(parsedDate)
-        } else {
-            "N/A" // یا هر مقدار پیش‌فرض که مناسب اپ شماست
-        }
+        val dayOfWeek = parsedDate?.let {
+            SimpleDateFormat("EEE", Locale.getDefault()).format(it)
+        } ?: "N/A"
+
+        val pm25 = day.day.airQuality?.pm25 ?: 0f
         val airQualityColor = when {
-            current.airQuality?.pm25 ?: 0f < 12 -> "#4CAF50"   // خوب (سبز)
-            current.airQuality?.pm25 ?: 0f < 35 -> "#FFC107"   // متوسط (زرد)
-            else -> "#F44336"                                  // ناسالم (قرمز)
+            pm25 < 12 -> "#4CAF50"
+            pm25 < 35 -> "#FFC107"
+            else -> "#F44336"
         }
 
         DailyForecast(
@@ -31,32 +30,30 @@ fun WeatherDto.toDailyForecasts(): List<DailyForecast> {
             maxTemp = day.day.maxTempC,
             minTemp = day.day.minTempC,
             dailyChanceOfRain = day.day.dailyChanceOfRain,
-            pm25 = current.airQuality?.pm25 ?: 0f,
-            airQualityIndicatorColorHex = airQualityColor
+            pm25 = pm25,
+            airQualityIndicatorColorHex = airQualityColor,
+            avgTemp = day.day.avgTempC
         )
     }
 }
 
-// --- 2. Domain → Entity
 fun DailyForecast.toDailyForecastEntity(): DailyForecastEntity {
     return DailyForecastEntity(
-        id = 0, // AutoGenerate
         city = city,
         dayOfWeek = dayOfWeek,
         date = date,
         maxTemp = maxTemp,
         minTemp = minTemp,
-        avgTemp = (maxTemp + minTemp) / 2f,
+        avgTemp = avgTemp,
         conditionText = description,
         iconUrl = iconUrl,
         dailyChanceOfRain = dailyChanceOfRain,
-        airQualityIpm25 = pm25,
+        airQualityPm25 = pm25,
         airQualityIndicatorColorHex = airQualityIndicatorColorHex,
         timestamp = System.currentTimeMillis()
     )
 }
 
-// --- 3. Entity → Domain
 fun DailyForecastEntity.toDailyForecast(): DailyForecast {
     return DailyForecast(
         city = city,
@@ -66,8 +63,9 @@ fun DailyForecastEntity.toDailyForecast(): DailyForecast {
         iconUrl = iconUrl,
         maxTemp = maxTemp,
         minTemp = minTemp,
+        avgTemp = avgTemp,
         dailyChanceOfRain = dailyChanceOfRain,
-        pm25 = airQualityIpm25,
+        pm25 = airQualityPm25,
         airQualityIndicatorColorHex = airQualityIndicatorColorHex
     )
 }

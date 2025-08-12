@@ -260,6 +260,3 @@ fun Color.Companion.fromHex(hex: String): Color {
         Color.Black // رنگ پیش‌فرض در صورت ورودی نامعتبر
     }
 }
-
-
-
