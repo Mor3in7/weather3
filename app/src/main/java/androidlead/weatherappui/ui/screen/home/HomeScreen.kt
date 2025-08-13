@@ -115,8 +115,8 @@ fun CurrentWeather.getAirQualityItems(): List<AirQualityItem> {
     return listOf(
         AirQualityItem("O₃", "${o3?.toInt() ?: "N/A"}", R.drawable.ic_o3),
         AirQualityItem("SO₂", "${so2?.toInt() ?: "N/A"}", R.drawable.ic_so2),
-        AirQualityItem("CO", "${co?.toInt() ?: "N/A"}", R.drawable.ic_co),
-        AirQualityItem("Humidity", "$humidity%", R.drawable.ic_humidity)
+        AirQualityItem("CO", "${co?.toInt() ?: "N/A"}", R.drawable.ic_frosty),
+        AirQualityItem("Humidity", "$humidity%", R.drawable.ic_o3)
     )
 }
 

@@ -27,8 +27,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidlead.weatherappui.R
 import androidlead.weatherappui.ui.screen.auth.AuthViewModel
 import androidlead.weatherappui.ui.theme.cuLightBlue
+import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.delay
-
+@Preview(showBackground = true)
 @Composable
 fun SignUp(
     onSignUpSuccess: () -> Unit = {}
