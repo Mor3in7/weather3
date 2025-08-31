@@ -24,7 +24,9 @@ import androidlead.weatherappui.R
 import androidlead.weatherappui.ui.screen.auth.AuthViewModel
 import androidlead.weatherappui.ui.theme.cuLightBlue
 import androidlead.weatherappui.ui.theme.cuOrange
+import androidx.compose.ui.tooling.preview.Preview
 
+@Preview(showBackground = true)
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit = {},
